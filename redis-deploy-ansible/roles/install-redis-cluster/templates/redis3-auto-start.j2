@@ -1,0 +1,10 @@
+[Unit]
+Description=Redis2 {{port2}}
+After=network.target
+
+[Service]
+Environment="PATH={{ PATH.stdout }}"
+ExecStart=/data1/redis-server /data1/redis_{{port2}}/redis.conf  --daemonize no
+ExecStop=/data1/redis-cli -h 127.0.0.1 -p {{port2}} shutdown
+[Install]
+WantedBy=multi-user.target

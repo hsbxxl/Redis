@@ -1,0 +1,50 @@
+- name: create redis2 user
+  user:
+    name: redis2
+    uid: 711
+    createhome: yes
+    state: present
+    system: yes
+    
+ 
+- name: mkdir redis2 path.
+  file: path="{{ item }}"   state=directory  owner=redis2 group=redis2 mode=0744 
+  with_items:
+    - /data1/redis_{{port}}
+    
+ 
+- name: copy redis2 tarball
+  unarchive:
+    src:  "{{ redis_software}}"
+    dest: /data1/
+    mode: 0755
+    copy: no
+
+- name: "Get System Env PATH"
+  register: PATH
+  shell: "echo $PATH"
+
+
+- name: "Copy redis conf file"
+  template: "src=redis.conf.j2 dest=/data1/redis_{{port}}/redis.conf  owner=redis2 group=redis2 mode=644"
+
+    
+- name: "Copy redis2 Systemd File redis2.service To /usr/lib/systemd/system"
+  template: "src=redis-auto-start.j2 dest=/usr/lib/systemd/system/redis2.service owner=root group=root mode=644"
+
+
+
+- name: "Reload Systemd Units"
+  systemd: 
+    name: redis2
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    
+    
+#- name: download range.usersync.tar.gz
+#  unarchive:
+#    src:  http://10.21.14.148/deploy/centos6/ranger/ranger-0.6.3-edh-0.4-usersync.tar.gz
+#    dest: /data1/redis_{{port}}
+#    mode: 0755
+#    copy: no        

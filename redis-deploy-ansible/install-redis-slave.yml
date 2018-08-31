@@ -1,0 +1,4 @@
+---
+- hosts: install-redis-slave
+  roles:
+    - install-redis-slave

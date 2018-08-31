@@ -1,0 +1,53 @@
+- name: create redis2 user
+  user:
+    name: redis2
+    uid: 711
+    createhome: yes
+    state: present
+    system: yes
+    
+ 
+- name: mkdir redis2 path.
+  file: path="{{ item }}"   state=directory  owner=redis2 group=redis2 mode=0744 
+  with_items:
+    - /data1/redis_{{port1}}
+    - /data1/redis_{{port2}}    
+ 
+- name: copy redis2 tarball
+  unarchive:
+    src:  "{{ redis_software}}"
+    dest: /data1/
+    mode: 0755
+    copy: no
+
+- name: "Get System Env PATH"
+  register: PATH
+  shell: "echo $PATH"
+
+
+- name: "Copy redis conf {{port1}} file"
+  template: "src=redis2.conf.j2 dest=/data1/redis_{{port1}}/redis.conf  owner=redis2 group=redis2 mode=644"
+
+- name: "Copy redis conf {{port2}} file"
+  template: "src=redis3.conf.j2 dest=/data1/redis_{{port2}}/redis.conf  owner=redis2 group=redis2 mode=644"
+
+    
+- name: "Copy redis2 {{port1}}  Systemd File redis2.service To /usr/lib/systemd/system"
+  template: "src=redis2-auto-start.j2 dest=/usr/lib/systemd/system/redis2.service owner=root group=root mode=644"
+
+- name: "Copy redis3 {{port2}} Systemd File redis3.service To /usr/lib/systemd/system"
+  template: "src=redis3-auto-start.j2 dest=/usr/lib/systemd/system/redis3.service owner=root group=root mode=644"
+
+- name: "Reload Systemd Units {{port1}}"
+  systemd: 
+    name: redis2
+    daemon_reload: yes
+    enabled: yes
+    state: started
+    
+- name: "Reload Systemd Units {{port2}}"
+  systemd: 
+    name: redis3
+    daemon_reload: yes
+    enabled: yes
+    state: started    

@@ -1,0 +1,5 @@
+---
+- hosts: install-redis-cluster
+  roles:
+    - install-redis-cluster
+   

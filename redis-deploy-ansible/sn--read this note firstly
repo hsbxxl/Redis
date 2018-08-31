@@ -1,0 +1,15 @@
+# install the redis master node or the single node redis 
+ ansible-playbook -i hosts install-redis-master.yml
+
+# install the redis slave node, please note the limit and vars
+ansible-playbook -i hosts install-redis-slave.yml --limit 10.27.8.84 --extra-vars "masterip=10.27.8.83"
+
+# check the relationship between master and slave
+ redis-cli -p 6380 -h 172.18.103.84 info|grep master_host
+
+#How to create the redis cluster, please replace the value to the IP. 
+#example
+redis-trib.rb create --replicas 1 192.8.8.136:7000 192.8.8.137:7001 192.8.8.138:7002 192.8.8.137:7002 192.8.8.136:7001  192.8.8.138:7000 
+
+#check the cluster status
+./redis-cli -h192.8.8.136 -p 9000 cluster nodes

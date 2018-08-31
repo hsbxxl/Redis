@@ -1,0 +1,67 @@
+################################ GENERAL  #####################################
+daemonize yes
+pidfile /var/run/redis_{{port}}.pid
+port {{port}}
+tcp-backlog 511
+tcp-keepalive 0
+loglevel notice
+logfile ./redis.log
+databases 16
+
+################################ SNAPSHOTTING  ################################
+save ""
+stop-writes-on-bgsave-error no
+rdbcompression yes
+rdbchecksum yes
+dbfilename dump.rdb
+dir /data1/redis_{{port}}
+
+################################# REPLICATION #################################
+slave-serve-stale-data yes
+slave-read-only yes
+repl-disable-tcp-nodelay no
+
+################################## SECURITY ###################################
+protected-mode no
+rename-command CONFIG "envison_config"
+rename-command flushall  "envison_flushall"
+rename-command flushdb  "envison_flushdb"
+
+################################### LIMITS ####################################
+#1.5G
+#maxmemory  1610612736
+maxmemory  {{memory_size}}
+
+############################## APPEND ONLY MODE ###############################
+appendonly {{appendonly}}
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite yes
+auto-aof-rewrite-percentage 80-100
+auto-aof-rewrite-min-size 64mb
+
+################################ LUA SCRIPTING  ###############################
+lua-time-limit 5000
+
+################################## SLOW LOG ###################################
+slowlog-log-slower-than 10000
+slowlog-max-len 1024
+
+############################# Event notification ##############################
+notify-keyspace-events ""
+
+############################### ADVANCED CONFIG ###############################
+hash-max-ziplist-entries 512
+hash-max-ziplist-value 64
+list-max-ziplist-entries 512
+list-max-ziplist-value 64
+set-max-intset-entries 512
+zset-max-ziplist-entries 128
+zset-max-ziplist-value 64
+activerehashing yes
+client-output-buffer-limit normal 0 0 0
+client-output-buffer-limit slave 0 0 0
+client-output-buffer-limit pubsub 32mb 8mb 60
+hz 10
+aof-rewrite-incremental-fsync yes
+repl-backlog-size 64mb

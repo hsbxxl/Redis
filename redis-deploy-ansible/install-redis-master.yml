@@ -1,0 +1,5 @@
+---
+- hosts: install-redis-master
+  roles:
+    - install-redis-master
+   
