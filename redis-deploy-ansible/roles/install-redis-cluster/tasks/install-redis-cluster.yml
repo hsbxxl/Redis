@@ -18,7 +18,7 @@
     src:  "{{ redis_software}}"
     dest: /data1/
     mode: 0755
-    copy: no
+    copy: yes
 
 - name: "Get System Env PATH"
   register: PATH
