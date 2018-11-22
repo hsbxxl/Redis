@@ -11,7 +11,7 @@ port=6380
 #1.5G
 memory_size=1610612736
 appendonly=yes
-redis_software=http://10.27.2.11/redis/redis-3.2.1.tar
+redis_software=/Redis/redis-deploy-ansible/software/redis-3.2.1.tar
 
 
 
@@ -30,7 +30,7 @@ memory_size=1610612736
 appendonly=no
 #masterip=test 
 masterport=6380
-redis_software=http://10.27.2.11/redis/redis-3.2.1.tar
+redis_software=/Redis/redis-deploy-ansible/software/redis-3.2.1.tar
 
 
 [install-redis-cluster]
@@ -47,5 +47,5 @@ port2=7001
 #4G
 memory_size=4010612736
 appendonly=yes
-redis_software=http://10.27.2.11/redis/redis-3.2.1.tar
+redis_software=/Redis/redis-deploy-ansible/software/redis-3.2.1.tar
 
